@@ -1,27 +1,21 @@
-module2_init_sql = """
 DROP DATABASE IF EXISTS sql_module2;
+
 SET SQL_MODE = NO_AUTO_VALUE_ON_ZERO;
+
 SET AUTOCOMMIT = 0;
+
 START TRANSACTION;
+
 SET time_zone = '+00:00';
+
 DROP DATABASE IF EXISTS sql_module2;
+
 CREATE DATABASE sql_module2;
+
 USE sql_module2;
-/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */
-;
-/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */
-;
-/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */
-;
-/*!40101 SET NAMES utf8mb4 */
-;
---
--- Database: sql_module2
---
---
--- Table structure for table toyStock
---
+
 DROP TABLE IF EXISTS toyStock;
+
 CREATE TABLE toyStock (
   stockId int UNSIGNED NOT NULL,
   stockBrand varchar(30) NOT NULL,
@@ -35,9 +29,6 @@ CREATE TABLE toyStock (
   typeId int NOT NULL
 ) ENGINE = InnoDB DEFAULT CHARSET = latin1;
 
---
--- Dumping data for table toyStock
---
 INSERT INTO toyStock (
     stockId,
     stockBrand,
@@ -49,8 +40,8 @@ INSERT INTO toyStock (
     stockQuantity,
     stockHue,
     typeId
-  )
-VALUES (
+  ) 
+  VALUES (
     1001,
     'Fisher Price' ,
     'Farm',
@@ -90,8 +81,7 @@ VALUES (
     1004,
     'Disney',
     'Jasmine',
-    'Dreaming of a life beyond the walls of the palace in Agrabah, Jasmine finds herself in the adventure of a lifetime thanks to Aladdin and the Genie.
-     With this Royal Shimmer Disney Princess doll, kids can imagine Jasmine flying in on a magical carpet.',
+    'Dreaming of a life beyond the walls of the palace in Agrabah, Jasmine finds herself in the adventure of a lifetime thanks to Aladdin and the Genie. With this Royal Shimmer Disney Princess doll, kids can imagine Jasmine flying in on a magical carpet.',
     '/images/jasmine.png',
     '/images/jasmine-small.png',
     19.99,
@@ -103,8 +93,7 @@ VALUES (
     1005,
     'Disney',
     'Ariel',
-    'Disney Princess Royal Shimmer Ariel Doll, Fashion Doll with Skirt and Accessories, Toy for Kids Ages 3 and Up. 
-     Free-spirited Ariel explores the world above the waves on her journey to fulfill her dreams in Disneys The Little Mermaid.',
+    'Disney Princess Royal Shimmer Ariel Doll, Fashion Doll with Skirt and Accessories, Toy for Kids Ages 3 and Up. Free-spirited Ariel explores the world above the waves on her journey to fulfill her dreams in Disneys The Little Mermaid.',
     '/images/ariel.png',
     '/images/ariel-small.png',
     19.99,
@@ -268,58 +257,43 @@ VALUES (
     'white',
     3
   );
---
--- Indexes for table toyStock
---
-ALTER TABLE toyStock
-ADD PRIMARY KEY (stockId),
+
+ALTER TABLE toyStock 
+  ADD PRIMARY KEY (stockId),
   ADD KEY typeId (typeId);
---
--- AUTO_INCREMENT for table 
---
-ALTER TABLE toyStock
-MODIFY stockId int NOT NULL AUTO_INCREMENT,
+
+ALTER TABLE toyStock 
+  MODIFY stockId int NOT NULL AUTO_INCREMENT,
   AUTO_INCREMENT = 16;
---
--- Table structure for table toyType
---
+
 DROP TABLE IF EXISTS toyType;
-CREATE TABLE toyType (
+  CREATE TABLE toyType (
   typeId int NOT NULL,
   typeName varchar(30) NOT NULL
 ) ENGINE = InnoDB DEFAULT CHARSET = latin1;
---
--- Dumping data for table toyType
---
-INSERT INTO toyType (typeId, typeName)
-VALUES (1, 'Playsets'),
+
+INSERT INTO toyType (typeId, typeName) 
+  VALUES (1, 'Playsets'),
   (2, 'Disney'),
   (3, 'Lego'),
   (4, 'Hot Wheels'),
   (5, 'Powered Rides'),
-  (6, 'Superheroes');
---
--- Indexes for table toyType
---
-ALTER TABLE toyType
+  (6, 'Superheroes'),
+  (7, 'Dolls');
+  
+ALTER TABLE toyType 
 ADD PRIMARY KEY (typeId);
---
--- AUTO_INCREMENT for table toyType
---
-ALTER TABLE toyType
-MODIFY typeId int NOT NULL AUTO_INCREMENT,
+
+ALTER TABLE toyType 
+  MODIFY typeId int NOT NULL AUTO_INCREMENT,
   AUTO_INCREMENT = 7;
---
--- Constraints for table toyStock
---
-/* ALTER TABLE toyStock */
-/* ADD CONSTRAINT toyStock_ibfk_1 FOREIGN KEY (typeId) REFERENCES toyType (typeId); */ 
-/* COMMIT; */
---
--- Table structure for table clients
---
+
+ALTER TABLE toyStock 
+  ADD CONSTRAINT toyStock_ibfk_1 FOREIGN KEY (typeId) REFERENCES toyType (typeId);
+  COMMIT;
+
 DROP TABLE IF EXISTS customers;
-CREATE TABLE customers (
+  CREATE TABLE customers (
   custId int UNSIGNED NOT NULL,
   custFirstname varchar(15) NOT NULL,
   custLastname varchar(25) NOT NULL,
@@ -329,14 +303,8 @@ CREATE TABLE customers (
   comments text DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
--- Indexes for table customers
---
 ALTER TABLE customers
   ADD PRIMARY KEY (custID);
 
--- AUTO_INCREMENT for table customers
-
 ALTER TABLE customers
   MODIFY custID int UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1;
-
-"""
