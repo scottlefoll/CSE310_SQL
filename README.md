@@ -27,9 +27,9 @@ authentication and the basic CRUD operations in MySQL.
     delete a record - deletes a document from any of the three tables
     update a record - updates a document in any of the three tables
 
-[SQL Database Programming Demo Video]()
+[SQL Database Programming Demo Video](https://www.youtube.com/watch?v=ebbRSO5ST6U&feature=youtu.be)
 
-[Cloud Database Programming Git Hub repo]()
+[AQL Database Programming Git Hub repo](https://github.com/scottlefoll/CSE310_SQL)
 
 
 ## MySQL Database Relational Database
