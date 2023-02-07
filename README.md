@@ -1,40 +1,112 @@
-# CSE310_SQL
+# Implementation of SQL Relational Database Functionality, with
+# MySQL, Python and MySQL Connector
 
-# Overview
+### CSE 310-04 Applied Programming - Jeremiah Pineda
+### W05 Module 2 SQL Relational DB
+## Scott LeFoll
+## 02/04/23
+## Created by Scott LeFoll
 
-{Important! Do not say in this section that this is college assignment. Talk about what you are trying to accomplish as a software engineer to further your learning.}
+## Module 2 Overview
 
-{Provide a description of the software that you wrote and how it integrates with a SQL Relational Database. Describe how to use your program.}
+The software uses asuthentication credentials to establish a secure connection to the MySQL Database. This connection is then used to implement CRUD functions. The objective is to gain initial experience with a fully functional SQL relational database, and understanding of the implementation in MySQL.The ultimate goal is to integrate this functionality in to desktop and web applications in the future.
 
-{Describe your purpose for writing this software.}
+There is a basic on-screen menu that provided simple user prompts, and captures input that is used to feed the database operations. There is basic validation provided on the user input.
 
-{Provide a link to your YouTube demonstration. It should be a 4-5 minute demo of the software running, a walkthrough of the code, and a view of how created the Relational Database.}
+This application is provided for the following purpose:
 
-[Software Demo Video](http://youtube.link.goes.here)
+To demonstrate a full range of basic database functionality in using the MySQL 
+database. The functions in this module are used to authenticate the credentials, and then create, retrieve, update, and delete records in the Toy Inventory SQL relational database (CSE310 SQL Module 2). The functions in this module are used to demonstrate
+authentication and the basic CRUD operations in MySQL.
+    
+    The following functionality is implemented:
+    
+    authenticate user - authenticates the user from within Python with user credentials
+    retrieve records - retrieves and displays all records with dynamic selection
+    create a record - creates a new record in any of the three tables
+    delete a record - deletes a document from any of the three tables
+    update a record - updates a document in any of the three tables
 
-# Relational Database
+[SQL Database Programming Demo Video]()
 
-{Describe the relational database you are using.}
+[Cloud Database Programming Git Hub repo]()
 
-{Describe the structure (tables) of the relational database that you created.}
 
-# Development Environment
+## MySQL Database Relational Database
 
-{Describe the tools that you used to develop the software}
+This application is using the MySQL Relational Database. It has three tables: a stockToys table that captures a unique record for every model and brand of toy maintained in inventory, a typeToy table that maintains a list of the type of toys in inventory, and a customers table that maintains a list of all active customers.
 
-{Describe the programming language that you used and any libraries.}
+The tables for this application have the following structures:
+
+toyStock:
+    stockID
+    stockBrand
+    stockModel
+    stockDesc
+    stockImage
+    stockThumb
+    stockCost
+    stockQuantity
+    stockHue
+    typeID
+    
+customers:
+    custID
+    custFirstname
+    custLastname
+    custEmail
+    custPassword
+    custLevel
+    comments
+
+toyType
+    typeID
+    typeName
+
+
+## Development Environment
+
+The development environment for this application is:
+
+Windows 10 Professional
+Python 3.11.1
+VS Code 1.74.3
+MySQL
+
+The dependencies for the application are:
+
+mysql.connector
+pandas
+re
+Error from mysql.connector
+
 
 # Useful Websites
 
-{Make a list of websites that you found helpful in this project}
+The following websites were used in the research for this application:
 
-- [Web Site Name](http://url.link.goes.here)
-- [Web Site Name](http://url.link.goes.here)
+- [PYnative.com MySQL tutorials](https://pynative.com/python-mysql-database-connection/)
+- [Stack Overflow](https://stackoverflow.com/questions/7268178/python-mysql-and-select-output-to-dictionary-with-column-names-for-keys)
+- [Geeks for Geeks](https://www.geeksforgeeks.org/how-to-show-all-tables-in-mysql-using-python/)
+- [W3 Schools](https://www.w3schools.com/python/python_mysql_select.asp)
+- [Medium](https://medium.com/@tattwei46/how-to-use-python-with-mysql-79304bee8753)
+- [Medium](https://medium.com/analytics-vidhya/connecting-python-to-mysql-8330f186c2d)
+- [Medium](https://medium.com/codex/connect-to-an-mysql-database-via-python-9c88ceac999a)
+- [Free Code Camp](https://www.freecodecamp.org/news/connect-python-with-sql/)
 
 # Future Work
 
-{Make a list of things that you need to fix, improve, and add in the future.}
+As I move forward with more in depth SQL database work, these are some of the features and enhancements that I want to implement:
+    
+    fully functional GUI frontend using tkinter
+    
+    implement database triggers
+    
+    Implement the application in Postgre and SQL Server
 
-- Item 1
-- Item 2
-- Item 3
+    Use a db.ini or YAML file to store config and connection parameters
+
+    Implement a connection pool to share and maintain resources
+
+    Implement the MySQL Server on both Google Cloud and AWS
+

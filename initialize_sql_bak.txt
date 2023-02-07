@@ -10,19 +10,6 @@ USE u716979257_sql_module2;
 
 DELETE FROM toyStock;
 
-DELETE FROM customers;
-
-DELETE FROM toyType;
-
-INSERT INTO toyType (typeId, typeName) 
-  VALUES (1, 'Playsets'),
-  (2, 'Disney'),
-  (3, 'Lego'),
-  (4, 'Hot Wheels'),
-  (5, 'Powered Rides'),
-  (6, 'Superheroes'),
-  (7, 'Dolls');
-  
 INSERT INTO toyStock (
     stockId,
     stockBrand,
@@ -251,7 +238,22 @@ INSERT INTO toyStock (
     'white',
     3
   );
+
+
+DELETE FROM toytype;
+
+INSERT INTO toyType (typeId, typeName) 
+  VALUES (1, 'Playsets'),
+  (2, 'Disney'),
+  (3, 'Lego'),
+  (4, 'Hot Wheels'),
+  (5, 'Powered Rides'),
+  (6, 'Superheroes'),
+  (7, 'Dolls');
   
+
+DELETE FROM customers;
+
 INSERT INTO customers (custFirstname, custLastname, custEmail, custPassword, custLevel, comments) 
   Values ('Julie', 'French', 'jfrench@gmail.com', 'welk438', 1, 'She loves Barbie'),
   ('Bill', 'Bradley', 'bigbillb@hotmail.com', 'qasdflkjewoi', 2, 'Model trains.');

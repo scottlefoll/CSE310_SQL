@@ -1,0 +1,26 @@
+# freemysqlhosting.net
+
+# host='sql9.freemysqlhosting.net',
+# user='sql9596116',
+# database = db,
+# password='Superuser1234',
+# use_pure=False
+# db name:  sql9596116
+
+
+# hostinger.com
+
+# host='localhost',
+# user='root',
+# database = db,
+# password='',
+# use_pure=False
+# db name: u716979257_sql_module2
+
+
+Use at least two of the aggregate functions to summarize numerical data in your database.
+
+Demonstrate the use of a column containing a date or time along with a query that demonstrates filtering within a date or time range.
+
+
+

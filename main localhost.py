@@ -25,8 +25,6 @@ import db_manager
 import re
 import sql
 
-# importing date class from datetime module
-from datetime import date
 from sql import *
 from db_manager import *
 
@@ -78,7 +76,7 @@ def create_record_query(table_str):
             for col in toy_cols:
                 if "typeId" in col:
                     lookup_sql_str = retrieve_records_query('toyType', True)
-                    results_lst = execute_sql(lookup_sql_str)
+                    results_lst = execute_sql(conn, lookup_sql_str)
                     lookup_df = results_lst[1]
                     print()
                     while True:
@@ -139,7 +137,7 @@ def retrieve_records_query(table_str, all=False):
             if input_str == '': return f"SELECT * FROM {table_str}"
             try:
                 input_int = int(input_str)
-                query_str = f"SELECT * FROM {table_str} WHERE custId = '{input_int}'"
+                query_str = f"SELECT * FROM {table_str} WHERE custId = {input_int}"
             except:
                 if '@' in input_str:
                     query_str = f"SELECT * FROM {table_str} WHERE custEmail = '{input_str}'"
@@ -156,7 +154,7 @@ def retrieve_records_query(table_str, all=False):
             if input_str == '': return f"SELECT * FROM {table_str}"
             try:
                 input_int = int(input_str)
-                query_str = f"SELECT * FROM {table_str} WHERE stockId = '{input_int}'"
+                query_str = f"SELECT * FROM {table_str} WHERE stockId = {input_int}"
             except:
                 input_str2 = input(f"Enter the model for the {input_str} brand to retrieve, or hit 'enter' to retrieve the entire {input_str} brand: ")
                 query_str = f"SELECT * FROM {table_str} WHERE stockModel = '{input_str}' AND stockBrand = '{input_str2}'"
@@ -166,7 +164,7 @@ def retrieve_records_query(table_str, all=False):
             if input_str == '': return f"SELECT * FROM {table_str}"
             try:
                 input_int = int(input_str)
-                query_str = f"SELECT * FROM {table_str} WHERE typeId = '{input_int}'"
+                query_str = f"SELECT * FROM {table_str} WHERE typeId = {input_int}"
             except:
                 query_str = f"SELECT * FROM {table_str} WHERE typeName = '{input_str}'"
     
@@ -189,14 +187,13 @@ def update_record_query(table_str):
     match table_str:
         case 'customers':
             lookup_sql_str = retrieve_records_query(table_str, True)
-            results_lst = execute_sql(lookup_sql_str)
+            results_lst = execute_sql(conn, lookup_sql_str)
             lookup_df = results_lst[1]
             cust_cols = list(lookup_df)
             print()
             while True:
                 print()        
-                input_str = input("Enter the Customer ID of the Customer to update from the table above, or 'b' to go back: ")
-                if input_str == 'b': return input_str
+                input_str = input("Enter the Customer ID of the Customer to update from the table above: ")
                 try:
                     input_int = int(input_str)
                     lookup_df = lookup_df[lookup_df['custID'] == int(input_str)]
@@ -240,14 +237,13 @@ def update_record_query(table_str):
             
         case 'toyStock':
             lookup_sql_str = retrieve_records_query(table_str, True)
-            results_lst = execute_sql(lookup_sql_str)
+            results_lst = execute_sql(conn, lookup_sql_str)
             lookup_df = results_lst[1]
             cust_cols = list(lookup_df)
             print()
             while True:
                 print()        
-                input_str = input("Enter the Toy Stock ID of the Toy to update from the table above, or 'b' to go back: ")
-                if input_str == 'b': return input_str
+                input_str = input("Enter the Toy Stock ID of the Toy to update from the table above: ")
                 try:
                     input_int = int(input_str)
                     lookup_df = lookup_df[lookup_df['stockId'] == int(input_str)]
@@ -292,14 +288,13 @@ def update_record_query(table_str):
 
         case 'toyType':        
             lookup_sql_str = retrieve_records_query(table_str, True)
-            results_lst = execute_sql(lookup_sql_str)
+            results_lst = execute_sql(conn, lookup_sql_str)
             lookup_df = results_lst[1]
             cust_cols = list(lookup_df)
             print()
             while True:
                 print()        
-                input_str = input("Enter the Type ID to update from the table above , or'b' to go back: ")
-                if input_str == 'b': return input_str
+                input_str = input("Enter the Type ID to update from the table above: ")
                 try:
                     input_int = int(input_str)
                     lookup_df = lookup_df[lookup_df['typeId'] == int(input_str)]
@@ -353,12 +348,7 @@ def delete_record_query(table_str):
     """
     match table_str:
         case 'customers':
-            query_str = retrieve_records_query(table_str, True)
-            results_lst = execute_sql(query_str)
-            df = results_lst[1]
-            print()
             input_str = input("Enter the customer ID, the last name, or the email of the Customer to delete: ").lower().replace(" ", "")
-            print()
             try:
                 input_int = int(input_str)
                 query_str = f"DELETE FROM {table_str} WHERE custId = {input_int}"
@@ -370,41 +360,23 @@ def delete_record_query(table_str):
                     input_str2 = input(f"Enter the first name for the '{input_str}' customer to delete: ")
                     query_str = f"DELETE FROM {table_str} WHERE custLastName = '{input_str}' AND custFirstname = '{input_str2}'"
         case 'toyStock':
-            query_str = retrieve_records_query(table_str, True)
-            results_lst = execute_sql(query_str)
-            df = results_lst[1]
-            print()
             input_str = input("Enter the Id or the brand for the Toy to delete: ")
-            print()
-            
             try:
                 input_int = int(input_str)
-                query_str = f"DELETE FROM {table_str} WHERE stockId = '{input_int}'"
+                query_str = f"DELETE FROM {table_str} WHERE stockId = {input_int}"
             except:
-                input_str2 = input(f"Enter the model for the '{input_str}' brand to delete, or hit 'enter' to delete the entire '{input_str}' brand: ")
+                input_str2 = input(f"Enter the model for the {input_str} brand to delete, or hit 'enter' to delete the entire '{input_str}' brand: ")
                 if input_str2 == '':
                     query_str = f"DELETE FROM {table_str} WHERE stockBrand = '{input_str}'"
                 else:
                     query_str = f"DELETE FROM {table_str} WHERE stockModel = '{input_str}' AND stockBrand = '{input_str2}'"
         case 'toyType':
-            query_str = retrieve_records_query(table_str, True)
-            results_lst = execute_sql(query_str)
-            df = results_lst[1]
-            print()
-            input_str = input("Enter the typeId to delete: ")
-            print()
-
-            query_str = retrieve_records_query('toyStock', True)
-            results_lst = execute_sql(query_str, print_bool = False)
-            df = results_lst[1] 
-            df = df[['typeId']]   
-
-            input_int = int(input_str)
-            if input_int in df['typeId'].values:
-                print("This typeId is in use. You cannot delete it.")
-                return 'b'
-            else:
-                query_str = f"DELETE FROM {table_str} WHERE typeId = '{input_int}'"
+            input_str = input("Enter the typeId or the toy type name to delete: ")
+            try:
+                input_int = int(input_str)
+                query_str = f"DELETE FROM {table_str} WHERE typeId = {input_int}"
+            except:
+                query_str = f"DELETE FROM {table_str} WHERE typeName = '{input_str}'"
                 
     return query_str
     
@@ -501,96 +473,81 @@ def example_crud():
     :type return: a bool
     
     """
-    conn = connect(db='u716979257_sql_module2')
+    # conn = connect(db='u716979257_sql_module2')
+    conn = connect(db='sql_module2')
     
-    # additional SQL statements to insert, update, and delete records as demonstrations of CRUD functions")
+    # additional SQL statements to insert, update, and delete records as demonstrations of CRUD functions
+    print("The following series of six (6) SQL executions are to demonstrate various CRUD functions from within code: ")
     print()
-    print(" connected to a MySQL Server running on Hostinger.com at host 185.212.71.102")
-    print()
-    print(" ******************** The following six (6) SQL queries are run *************** ")
-    print(" ************** to demonstrate various CRUD operations from within code: ************** ")
     # The following statement inserts 7 records into the Customers table.
-    
-    print()
-    print("Seven (7) additional records have been created in the Customers Table through the following stored SQL query: ")
-    print()
-    print()
-    print(sql_insert1)
-    print()
-    results_lst = execute_sql(sql_insert1) # execute the first stored SQL statement
+    results_lst = execute_sql(conn, sql_insert1) # execute the first stored SQL statement
     if results_lst[0]:
         print()
-        print(print("This SQL statement demonstrates a multi-record insertion into the Customers Table"))
+        print("Seven (7) additional records have been created in the Customers Table through the following stored SQL query: ")
         print()
-        input("The records were created successfully. Hit Enter to continue...")
+        print(sql_insert1)
+        print()
+        input("Hit Enter to continue...")
     else:
         print("There was an error inserting into the database.")
         exit()
-    
-    print()
-    print("The following SQL statement modifies a single customer record using the customer email to search by:")
-    print()
-    print(sql_update1)
+        
+    results_lst = execute_sql(conn, sql_update1) # execute the 2nd stored SQL statement
     if results_lst[0]:
         print()
-        results_lst = execute_sql(sql_update1) # execute the 2nd stored SQL statement
+        print("The record for the customer with email 'g.mitchell@cloudnet.com' has been updated in the customers table, using the following SQL query:")
         print()
-        input("One customer record updated. Hit Enter to continue...")
-    else:
-        print("There was an error updating the customers table.")
-        exit()
-    
-    print()
-    print("The following SQL query updates records in the Toy Inventory File, searching for text substrings within a larger text field:")
-    print()
-    print(sql_update2)
-    if results_lst[0]:
+        print(sql_update1)
         print()
-        results_lst = execute_sql(sql_update2) # execute the 3rd stored SQL statement
-        print()
-        input("Toy inventory records updated successfully. Hit Enter to continue...")
+        input("Hit Enter to continue...")
     else:
         print("There was an error updating the customers table.")
         exit()
 
-    print()
-    print("The following query selects specific Toy Inventory items, using an INNER JOIN on the typeID to retrieve Disney Records:")
-    print()
-    print(sql_select1)
+    results_lst = execute_sql(conn, sql_update2) # execute the 3rd stored SQL statement
     if results_lst[0]:
         print()
-        results_lst = execute_sql(sql_select1) # execute the 4th stored SQL statement
+        print("The toyStock inventory file has been updated using the following SQL query:")
+        print()
+        print(sql_update2)
+        print()
+        input("Hit Enter to continue...")
+    else:
+        print("There was an error updating the customers table.")
+        exit()
+
+    results_lst = execute_sql(conn, sql_select1) # execute the 4th stored SQL statement
+    if results_lst[0]:
+        print()
+        print("The toyStock inventory file has been updated using the following SQL query:")
+        print()
+        print(sql_select1)
         print()
         input("Hit Enter to continue...")
     else:
         print("There was an error updating the customers table.")
         exit()
         
-        
-    print()
-    print("All Lego brand toys with Model containing the word 'Starship' have been deleted from the inventory file using the following SQL query:")
-    print()
-    print(sql_delete)
+    results_lst = execute_sql(conn, sql_delete) # execute the 5th stored SQL statement
     if results_lst[0]:
         print()
-        results_lst = execute_sql(sql_delete) # execute the 5th stored SQL statement
+        print("All Lego brand toys with Model containing the word 'Starship' have been deleted from the inventory file using the following SQL query:")
+        print()
+        print(sql_delete)
         print()
         input("Hit Enter to continue...")
     else:
         print("There was an error updating the customers table.")
         exit()
         
-    
-    print()
-    print("The stockThumb column for all toyStock inventory items has been updated to add '/assets' to the path using the following SQL query:")
-    print()
-    print(sql_update3)
+    results_lst = execute_sql(conn, sql_update3) # execute the 6th stored SQL statement
     if results_lst[0]:
         print()
-        results_lst = execute_sql(sql_update3) # execute the 6th stored SQL statement
-        print()    
-        input("Hit Enter to continue...")
+        print("The stockThumb column for all toyStock inventory items has been updated to add '/assets' to the path using the following SQL query:")
         print()
+        print(sql_update3)
+        print()
+        input("Hit Enter to continue...")
     else:
         print("There was an error updating the customers table.")
         exit()
@@ -599,7 +556,7 @@ def example_crud():
     return True
 
 
-def menu():
+def menu(conn):
     """Displays a menu and asks the user for a menu choice.
 
     :param conn: the connection to the database
@@ -616,15 +573,10 @@ def menu():
         print("2. Retrieve records")
         print("3. Update record")
         print("4. Delete a Record")
-        print("5. Retrieve all customers that have birthdays this month")
-        print("6. Average price of all inventory items")
-        print("7. Total dollar value of all inventory items  - sum(stock * price)")
-        print("8. Sum of each Customer Level (1-3)")    
-        print("9. Exit")
+        print("5. Exit")
         print()
-        
-        choice_str = input("Please enter a menu choice (1 - 9): ")
-        if choice_str == "": continue
+
+        choice_str = input("Please enter a menu choice (1 - 5): ")
         if choice_str == "":
             # if the user hits 'Enter', then exit the program
             print("Exiting the program")
@@ -633,9 +585,9 @@ def menu():
         try:
             # try to convert the user input to int.
             choice_int = int(choice_str)
-            if choice_int < 1 or choice_int > 9:
+            if choice_int < 1 or choice_int > 5:
                 # if the input is not in the range 0 - 9, then go back to input
-                print("Please enter a valid menu choice (1 - 9)")
+                print("Please enter a valid menu choice (1 - 5)")
                 continue
             else:
                 # if the input is in the range 0 - 9, then execute the corresponding function
@@ -646,80 +598,42 @@ def menu():
                         table_str = menu_input(action_str)
                         if table_str == 'b': continue
                         query_str = create_record_query(table_str)
-                        execute_sql(query_str)
+                        execute_sql(conn, query_str)
                     case 2:
                         # retrieve records
                         action_str = "retrieve from"
                         table_str = menu_input(action_str)
                         if table_str == 'b': continue
                         query_str = retrieve_records_query(table_str)
-                        execute_sql(query_str)
+                        execute_sql(conn, query_str)
                     case 3:
                         # update record
                         action_str = "update to"
                         table_str = menu_input(action_str)
                         if table_str == 'b': continue
                         query_str = update_record_query(table_str)
-                        if query_str == 'b': continue
-                        execute_sql(query_str)
+                        execute_sql(conn, query_str)
                     case 4:
                         # delete record
                         action_str = "delete from"
                         table_str = menu_input(action_str)
                         if table_str == 'b': continue
                         query_str = delete_record_query(table_str)
-                        if query_str == 'b': continue
                         delete_str = input("Confirm Delete Record: y/n ").lower()
                         if delete_str == 'y':
-                            execute_sql(query_str)
+                            execute_sql(conn, query_str)
                         else:
                             continue
                     case 5:
-                        # retrieve birthday customers for current month
-                        action_str = "retrieve from"
-                        table_str = "customers"  
-                        # creating the date object of today's date
-                        todays_date = date.today()
-                        bday = todays_date.month
-                        query_str = f"SELECT * FROM customers WHERE MONTH(DOB) = '{str(bday)}'";
-                        print()
-                        print("A list of customers with birthdays in the current month:")
-                        print()
-                        execute_sql(query_str)     
-                    case 6:
-                        # retrieve average price across all inventory items
-                        action_str = "retrieve from"
-                        table_str = "toyStock"  
-                        query_str = f"SELECT AVG(stockCost) AS AveragePrice FROM toyStock";
-                        print()
-                        print("The average price of all the toys listed in inventory: ")
-                        execute_sql(query_str)
-                    case 7:
-                        # the value of all inventory items, price * quantity
-                        action_str = "retrieve from"
-                        table_str = "toyStock"  
-                        query_str = f"SELECT SUM(stockCost*stockQuantity) AS total_value FROM toyStock;'";
-                        print()
-                        print("The total dollar value of all inventory items - sum(price * quantity):")
-                        print()
-                        execute_sql(query_str)                    
-                    case 8:
-                        # the total count of customers by level
-                        action_str = "retrieve from"
-                        table_str = "customers"  
-                        query_str = f"SELECT custLevel, COUNT(custLevel) AS count, SUM(COUNT(custLevel)) OVER() AS total_count FROM Table GROUP BY custLevel";
-                        print()
-                        print("A count of customers at each customer level:")
-                        print()
-                        execute_sql(query_str)                    
-                        
-                    case 9:
-                        exit()
-                        
+                        if conn.is_connected():
+                            conn.close()
+                            print("MySQL connection is closed")
+                        query_str = exit()
+                
         except ValueError:
             # if the int conversion throws an error, then go back to input
             print()
-            print("Please enter a valid menu choice (1 - 9)")
+            print("Please enter a valid menu choice (1 - 5)")
             continue
         
 print()
@@ -729,55 +643,49 @@ if __name__ == '__main__':
     
     # SQL statements to create the Toy Database, with three tables
     # opening the file that contains the SQL Table Definition Query in read mode
-    # my_file = open("initialize_sql.txt", "r", encoding="utf8")
+    my_file = open("initialize_sql.txt", "r", encoding="utf8")
     # reading the file
-    # data = my_file.read()
-    # data = re.sub(r' +', ' ', data)
+    data = my_file.read()
+    data = re.sub(r' +', ' ', data)
     # replacing end of line('/n') with ' ' and
     # splitting the text it further when '.' is seen.
-    # sql_lst = data.replace('\n', ' ').split(";")
-    # my_file.close()
+    sql_lst = data.replace('\n', ' ').split(";")
+    my_file.close()
 
-    # init_int = menu_init()
-    # if init_int > 0:
-    #     db_initialize()
-    #     if init_int == 2:
-    
-    example_crud()
+    init_int = menu_init()
+    if init_int > 0:
+        db_initialize()
+        if init_int == 2:
+            example_crud()
 
     # Show the three tables after the database is created
     # Customers table
     print()
     print("**************************This is the start of the Toy Inventory SQL Database Application**************************")
     print()
-    print("Display all three tables at application startup:")
+    print("These are the three tables at application startup:")
     print()
-    # Customers table
-    conn = connect(db='u716979257_sql_module2')
-    results_lst = execute_sql(sql_select2, "Customers")
+    conn = connect(db='sql_module2')
+    results_lst = execute_sql(conn, sql_select2, "Customers")
     df = results_lst[1]
     cust_cols = list(df)
     cust_cols = cust_cols[1:]
-    conn.close()
-    
     # Toy Inventory table
-    conn = connect(db='u716979257_sql_module2')
-    results_lst = execute_sql(sql_select3, "Toy Inventory")
+    conn = connect(db='sql_module2')
+    results_lst = execute_sql(conn, sql_select3, "Toy Inventory")
     df = results_lst[1]
     toy_cols = list(df)
     toy_cols = toy_cols[1:]
-    conn.close()
-    
     # Toy Type table
-    conn = connect(db='u716979257_sql_module2')
-    results_lst = execute_sql(sql_select4, "Toy Type")
+    conn = connect(db='sql_module2')
+    results_lst = execute_sql(conn, sql_select4, "Toy Type")
     df = results_lst[1]
     type_cols = list(df)
     type_cols = type_cols[1:]
-    conn.close()
-
     
-    menu()
+    input("hit enter to continue")
+    
+    menu(conn)
     
      
      

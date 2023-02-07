@@ -8,21 +8,19 @@ SET time_zone = '+00:00';
 
 USE u716979257_sql_module2;
 
-DELETE FROM toyStock;
+CREATE TABLE toyStock (
+  stockId int UNSIGNED NOT NULL,
+  stockBrand varchar(30) NOT NULL,
+  stockModel varchar(30) NOT NULL,
+  stockDesc text NOT NULL,
+  stockImage varchar(50) NOT NULL,
+  stockThumb varchar(50) NOT NULL,
+  stockCost decimal(10, 0) NOT NULL,
+  stockQuantity smallint NOT NULL,
+  stockHue varchar(20) NOT NULL,
+  typeId int NOT NULL
+) ENGINE = InnoDB DEFAULT CHARSET = utf8;
 
-DELETE FROM customers;
-
-DELETE FROM toyType;
-
-INSERT INTO toyType (typeId, typeName) 
-  VALUES (1, 'Playsets'),
-  (2, 'Disney'),
-  (3, 'Lego'),
-  (4, 'Hot Wheels'),
-  (5, 'Powered Rides'),
-  (6, 'Superheroes'),
-  (7, 'Dolls');
-  
 INSERT INTO toyStock (
     stockId,
     stockBrand,
@@ -251,7 +249,57 @@ INSERT INTO toyStock (
     'white',
     3
   );
+
+ALTER TABLE toyStock 
+  ADD PRIMARY KEY (stockId),
+  ADD KEY typeId (typeId);
+
+ALTER TABLE toyStock 
+  MODIFY stockId int NOT NULL AUTO_INCREMENT,
+  AUTO_INCREMENT = 16;
+
+CREATE TABLE toyType (
+  typeId int NOT NULL,
+  typeName varchar(30) NOT NULL
+) ENGINE = InnoDB DEFAULT CHARSET = utf8;
+
+INSERT INTO toyType (typeId, typeName) 
+  VALUES (1, 'Playsets'),
+  (2, 'Disney'),
+  (3, 'Lego'),
+  (4, 'Hot Wheels'),
+  (5, 'Powered Rides'),
+  (6, 'Superheroes'),
+  (7, 'Dolls');
   
-INSERT INTO customers (custFirstname, custLastname, custEmail, custPassword, custLevel, comments) 
-  Values ('Julie', 'French', 'jfrench@gmail.com', 'welk438', 1, 'She loves Barbie'),
-  ('Bill', 'Bradley', 'bigbillb@hotmail.com', 'qasdflkjewoi', 2, 'Model trains.');
+ALTER TABLE toyType 
+ADD PRIMARY KEY (typeId);
+
+ALTER TABLE toyType 
+  MODIFY typeId int NOT NULL AUTO_INCREMENT,
+  AUTO_INCREMENT = 7;
+
+ALTER TABLE toyStock 
+  ADD CONSTRAINT toyStock_ibfk_1 FOREIGN KEY (typeId) REFERENCES toyType (typeId);
+  COMMIT;
+  
+CREATE TABLE customers (
+  custId int UNSIGNED NOT NULL,
+  custFirstname varchar(15) NOT NULL,
+  custLastname varchar(25) NOT NULL,
+  custEmail varchar(40) NOT NULL,
+  custPassword varchar(255) NOT NULL,
+  custLevel enum('1','2','3') NOT NULL DEFAULT '1',
+  comments text DEFAULT NULL,
+  DOB DATE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+ALTER TABLE customers
+  ADD PRIMARY KEY (custID);
+
+ALTER TABLE customers
+  MODIFY custID int UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1;
+
+INSERT INTO customers (custFirstname, custLastname, custEmail, custPassword, custLevel, comments, DOB) 
+  Values ('Julie', 'French', 'jfrench@gmail.com', 'welk438', 1, 'She loves Barbie', 1995.02.15),
+  ('Bill', 'Bradley', 'bigbillb@hotmail.com', 'qasdflkjewoi', 2, 'Model trains.', 1989.02.24);
